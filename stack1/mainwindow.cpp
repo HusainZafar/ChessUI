@@ -2,24 +2,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QMessageBox>
-#include "QBitmap"
 
-QImage wpawn,bpawn,wrook,brook,wbishop,bbishop,whorse,bhorse,wqueen,bqueen,wking,bking;
-int arr[8][8]={1,1,1,1,1,1,1,1,
-               1,1,1,1,1,1,1,1,
-               0,0,0,0,0,0,0,0,
-               0,0,0,0,0,0,0,0,
-               0,0,0,0,0,0,0,0,
-               0,0,0,0,0,0,0,0,
-               1,1,1,1,1,1,1,1,
-               1,1,1,1,1,1,1,1,};
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
-{
+static QPushButton *c,*d;
+
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
+
     ui->setupUi(this);
 
-    connect( ui->pushButton, SIGNAL(clicked()), this, SLOT(common())) ;
+    connect( ui->pushButton_1, SIGNAL(clicked()), this, SLOT(common())) ;
     connect( ui->pushButton_2, SIGNAL(clicked()), this, SLOT(common())) ;
     connect( ui->pushButton_3, SIGNAL(clicked()), this, SLOT(common())) ;
     connect( ui->pushButton_4, SIGNAL(clicked()), this, SLOT(common())) ;
@@ -89,7 +79,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QPixmap wp = this->ui->pushButton_52->icon().pixmap(61,61);
     wpawn=QImage(wp.toImage());
 
-    QPixmap br = this->ui->pushButton->icon().pixmap(61,61);
+    QPixmap br = this->ui->pushButton_1->icon().pixmap(61,61);
     brook=QImage(br.toImage());
     QPixmap wr = this->ui->pushButton_44->icon().pixmap(61,61);
     wrook=QImage(wr.toImage());
@@ -116,21 +106,12 @@ MainWindow::MainWindow(QWidget *parent) :
     //print_array();
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
 }
 
-int iswhite1=0,iswhite2=0;
-int count=0;
-QPushButton *c,*d;
-int xa,xb,ya,yb;
-QImage f,s;
-
-void MainWindow::common()
-{
-    if(count==0)
-    {
+void MainWindow::common() {
+    if(count==0) {
         c = qobject_cast<QPushButton *>(sender());
         xa=c->x();
         ya=c->y();
@@ -220,7 +201,7 @@ bool MainWindow::ifrook(int x1,int y1,int x2,int y2)
             int d=b>q?b:q;
             int e=b<q?b:q;
             for(int i=e+1;i<d;i++)
-                if(arr[i][a]!=0)
+                if(board[i][a]!=0)
                      return 0;
         }
         else
@@ -231,7 +212,7 @@ bool MainWindow::ifrook(int x1,int y1,int x2,int y2)
             int d=b>q?b:q;
             int e=b<q?b:q;
             for(int i=e+1;i<d;i++)
-                if(arr[a][i]!=0)
+                if(board[a][i]!=0)
                     return 0;
 
 
@@ -256,73 +237,69 @@ bool MainWindow::ifbishop(int x1, int y1, int x2, int y2)
             int m=q>d?q:d;
             int i,j;
             float sl=(y2-y1)/(x2-x1);
-            if(sl<0)
+            if(sl<0) {
                 for(i=l+1,j=m-1;i<e;i++,j--)
-                     if(arr[j][i]==1)
+                     if(board[j][i]==1)
                          return 0;
-             else
+            } else{
                 for(i=l+1,j=h+1;i<e;i++,j++)
-                    if(arr[j][i]==1)
+                    if(board[j][i]==1)
                          return 0;
+            }
     }
     return 1;
 }
 
-bool MainWindow::ifhorse(int x1, int y1, int x2, int y2)
-{
-    if(floor(dst(x1,y1,x2,y2))==134)
+bool MainWindow::ifhorse(int x1, int y1, int x2, int y2) {
+    if(floor(dst(x1,y1,x2,y2))==134) {
         return 1;
+    }
     return 0;
 }
 
-bool MainWindow::ifking(int x1, int y1, int x2, int y2)
-{
-    if(y1==490 && x1==300)
-    {
-        if((y2-y1)==120 && arr[7][5]==0 && arr[7][6]==0)
-        {
+bool MainWindow::ifking(int x1, int y1, int x2, int y2) {
+    if(y1==490 && x1==300) {
+        if((y2-y1)==120 && board[7][5]==0 && board[7][6]==0) {
             this->ui->pushButton_40->setIcon(QIcon());
             this->ui->pushButton_61->setIcon(QIcon(QPixmap::fromImage(wrook)));
             return 1;
         }
     }
-    if(dst(x1,y1,x2,y2)==60 || ((abs(x1-x2)==60)&&(abs(y1-y2)==60)))
+    if(dst(x1,y1,x2,y2)==60 || ((abs(x1-x2)==60)&&(abs(y1-y2)==60))) {
             return 1;
+    }
     return 0;
 }
 
-bool MainWindow::ifpawn(int x1, int y1, int x2, int y2, int ch)
-{
+bool MainWindow::ifpawn(int x1, int y1, int x2, int y2, int ch) {
     int l=dst(x1,y1,x2,y2);
     if(ch==0 && y2<y1)   //black
         return 0;
     if(ch==1 && y2>y1)
         return 0;
-    if(arr[(y2-70)/60][(x2-60)/60]==1 && l==84)
+    if(board[(y2-70)/60][(x2-60)/60]==1 && l==84)
         return 1;
-    if(arr[(y2-70)/60][(x2-60)/60]==1 && l==60)
+    if(board[(y2-70)/60][(x2-60)/60]==1 && l==60)
         return 0;
-    if((y1==130 || y1==430) && (l==60 || l==120) && (arr[((y2+y1)/2-70)/60][(x2-60)/60]==0))
+    if((y1==130 || y1==430) && (l==60 || l==120) && (board[((y2+y1)/2-70)/60][(x2-60)/60]==0))
         return 1;
     if(l==60 && x1==x2)
         return 1;
     return 0;
 }
-/*
-void MainWindow::print_array()
-{
-    this->ui->textEdit->setText(QString::number(arr[0][0])+QString::number(arr[0][1])+QString::number(arr[0][2])+QString::number(arr[0][3])+QString::number(arr[0][4])+QString::number(arr[0][5])+QString::number(arr[0][6])+QString::number(arr[0][7])+"\n"+
-            QString::number(arr[1][0])+QString::number(arr[1][1])+QString::number(arr[1][2])+QString::number(arr[1][3])+QString::number(arr[1][4])+QString::number(arr[1][5])+QString::number(arr[1][6])+QString::number(arr[1][7])+"\n"+
-            QString::number(arr[2][0])+QString::number(arr[2][1])+QString::number(arr[2][2])+QString::number(arr[2][3])+QString::number(arr[2][4])+QString::number(arr[2][5])+QString::number(arr[2][6])+QString::number(arr[2][7])+"\n"+
-            QString::number(arr[3][0])+QString::number(arr[3][1])+QString::number(arr[3][2])+QString::number(arr[3][3])+QString::number(arr[3][4])+QString::number(arr[3][5])+QString::number(arr[3][6])+QString::number(arr[3][7])+"\n"+
-            QString::number(arr[4][0])+QString::number(arr[4][1])+QString::number(arr[4][2])+QString::number(arr[4][3])+QString::number(arr[4][4])+QString::number(arr[4][5])+QString::number(arr[4][6])+QString::number(arr[4][7])+"\n"+
-            QString::number(arr[5][0])+QString::number(arr[5][1])+QString::number(arr[5][2])+QString::number(arr[5][3])+QString::number(arr[5][4])+QString::number(arr[5][5])+QString::number(arr[5][6])+QString::number(arr[5][7])+"\n"+
-            QString::number(arr[6][0])+QString::number(arr[6][1])+QString::number(arr[6][2])+QString::number(arr[6][3])+QString::number(arr[6][4])+QString::number(arr[6][5])+QString::number(arr[6][6])+QString::number(arr[6][7])+"\n"+
-            QString::number(arr[7][0])+QString::number(arr[7][1])+QString::number(arr[7][2])+QString::number(arr[7][3])+QString::number(arr[7][4])+QString::number(arr[7][5])+QString::number(arr[7][6])+QString::number(arr[7][7]));
-}
-*/
-void MainWindow::promote()
-{
+
+//void MainWindow::print_array() {
+//    this->ui->textEdit->setText(QString::number(board[0][0])+QString::number(board[0][1])+QString::number(board[0][2])+QString::number(board[0][3])+QString::number(board[0][4])+QString::number(board[0][5])+QString::number(board[0][6])+QString::number(board[0][7])+"\n"+
+//            QString::number(board[1][0])+QString::number(board[1][1])+QString::number(board[1][2])+QString::number(board[1][3])+QString::number(board[1][4])+QString::number(board[1][5])+QString::number(board[1][6])+QString::number(board[1][7])+"\n"+
+//            QString::number(board[2][0])+QString::number(board[2][1])+QString::number(board[2][2])+QString::number(board[2][3])+QString::number(board[2][4])+QString::number(board[2][5])+QString::number(board[2][6])+QString::number(board[2][7])+"\n"+
+//            QString::number(board[3][0])+QString::number(board[3][1])+QString::number(board[3][2])+QString::number(board[3][3])+QString::number(board[3][4])+QString::number(board[3][5])+QString::number(board[3][6])+QString::number(board[3][7])+"\n"+
+//            QString::number(board[4][0])+QString::number(board[4][1])+QString::number(board[4][2])+QString::number(board[4][3])+QString::number(board[4][4])+QString::number(board[4][5])+QString::number(board[4][6])+QString::number(board[4][7])+"\n"+
+//            QString::number(board[5][0])+QString::number(board[5][1])+QString::number(board[5][2])+QString::number(board[5][3])+QString::number(board[5][4])+QString::number(board[5][5])+QString::number(board[5][6])+QString::number(board[5][7])+"\n"+
+//            QString::number(board[6][0])+QString::number(board[6][1])+QString::number(board[6][2])+QString::number(board[6][3])+QString::number(board[6][4])+QString::number(board[6][5])+QString::number(board[6][6])+QString::number(board[6][7])+"\n"+
+//            QString::number(board[7][0])+QString::number(board[7][1])+QString::number(board[7][2])+QString::number(board[7][3])+QString::number(board[7][4])+QString::number(board[7][5])+QString::number(board[7][6])+QString::number(board[7][7]));
+//}
+
+void MainWindow::promote() {
     QMessageBox msgBox;
     msgBox.setText(tr("Chose piece?"));
     QAbstractButton* rook = msgBox.addButton(tr("Rook"), QMessageBox::YesRole);
@@ -360,13 +337,11 @@ void MainWindow::promote()
     }
 }
 
-void MainWindow::update_arr(int x1,int y1,int x2,int y2)
-{
-    arr[(y2-70)/60][(x2-60)/60]=1;
-    arr[(y1-70)/60][(x1-60)/60]=0;
+void MainWindow::update_arr(int x1,int y1,int x2,int y2) {
+    board[(y2-70)/60][(x2-60)/60]=1;
+    board[(y1-70)/60][(x1-60)/60]=0;
 }
 
-float MainWindow::dst(int x1,int y1,int x2,int y2)
-{
-    return sqrt((y2-y1)*(y2-y1)+(x2-x1)*(x2-x1));
+int MainWindow::dst(int x1,int y1,int x2,int y2) {
+    return int(sqrt((y2-y1)*(y2-y1)+(x2-x1)*(x2-x1)));
 }

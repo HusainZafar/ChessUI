@@ -9,10 +9,22 @@ class MainWindow;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-
+    QImage wpawn,bpawn,wrook,brook,wbishop,bbishop,whorse,bhorse,wqueen,bqueen,wking,bking;
+    int board[8][8]={{1,1,1,1,1,1,1,1},
+                     {1,1,1,1,1,1,1,1},
+                     {0,0,0,0,0,0,0,0},
+                     {0,0,0,0,0,0,0,0},
+                     {0,0,0,0,0,0,0,0},
+                     {0,0,0,0,0,0,0,0},
+                     {1,1,1,1,1,1,1,1},
+                     {1,1,1,1,1,1,1,1}};
+    int iswhite1=0,iswhite2=0;
+    int count=0;
+    int xa,xb,ya,yb;
+    QImage f,s;
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    float dst(int,int,int,int);
+    explicit MainWindow(QWidget *parent = nullptr);
+    int dst(int,int,int,int);
     ~MainWindow();
 protected slots:
     void common();
