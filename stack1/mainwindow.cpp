@@ -2,77 +2,20 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QMessageBox>
+#include <sstream>
+using namespace std;
 
 static QPushButton *c,*d;
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
-
     ui->setupUi(this);
 
-    connect( ui->pushButton_1, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_2, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_3, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_4, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_5, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_6, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_7, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_8, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_9, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_10, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_11, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_12, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_13, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_14, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_15, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_16, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_17, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_18, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_19, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_20, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_21, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_22, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_23, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_24, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_25, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_26, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_27, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_28, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_29, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_30, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_31, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_32, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_33, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_34, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_35, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_36, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_37, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_38, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_39, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_40, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_41, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_42, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_43, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_44, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_45, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_46, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_47, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_48, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_49, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_50, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_51, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_52, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_53, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_54, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_55, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_56, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_57, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_58, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_59, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_60, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_61, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_62, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_63, SIGNAL(clicked()), this, SLOT(common())) ;
-    connect( ui->pushButton_64, SIGNAL(clicked()), this, SLOT(common())) ;
+    for(int i = 1; i< 64; i++){
+        std::ostringstream o;
+        o << "pushButton_" << i;
+        QString button =  QString::fromStdString(o.str());
+        connect( window()->findChild<QPushButton *>(button), SIGNAL(clicked()), this, SLOT(common())) ;
+    }
 
     QPixmap bp = this->ui->pushButton_3->icon().pixmap(61,61);
     bpawn=QImage(bp.toImage());
